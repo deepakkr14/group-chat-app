@@ -1,7 +1,6 @@
 const submitbtn = document.querySelector("#submitbtn");
-const p = document.querySelector("#p");
 const alertContainer = document.getElementById("alertContainer");
-const alertElement = document.getElementById("autoCloseAlert");
+// const alertElement = document.getElementById("autoCloseAlert");
 
 async function singup(event) {
   event.preventDefault();
@@ -18,12 +17,13 @@ async function singup(event) {
       password,
       phone,
     });
-   
+
     if (response.data.length > 0) {
-      p.innerText = "Email already exists";
-      showAlert("email exists", 3000);
+      showAlert("Email already exists", 3000);
     } else {
-      window.location.href = "./login.html";
+      showAlert("succesfull sing up", 3000);
+      // window.location.href = "./login.html";
+      co;
     }
   } catch (error) {
     console.log(error);
@@ -31,12 +31,11 @@ async function singup(event) {
 }
 
 function showAlert(message, duration) {
- 
-  alertElement.innerHTML = message;
+  // alertElement.innerHTML = message;
+  alertContainer.innerHTML = message;
   alertContainer.style.display = "block";
+  // alertContainer.style.display = "block";
   setTimeout(() => {
     alertContainer.style.display = "none";
   }, duration);
 }
-
-

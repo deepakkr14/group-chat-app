@@ -18,7 +18,7 @@ exports.postaddNew = async (req, res, next) => {
     });
 
     if (result.length > 0) {
-      res.status(404).json(result);
+      res.status(202).json(result);
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
 
