@@ -22,7 +22,7 @@ async function singup(event) {
       showAlert("Email already exists", 3000);
     } else {
       showAlert("succesfull sing up", 3000);
-      // window.location.href = "./login.html";
+      window.location.href = "./login.html";
       co;
     }
   } catch (error) {
