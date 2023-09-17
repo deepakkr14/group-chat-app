@@ -5,12 +5,12 @@ const express = require("express");
 const userController = require("./user-controller");
 
 const router = express.Router();
-
+const auth=require('./auth')
 
 // router.get("/getAll", userController.getEverything);
 
-router.post("/users/singup", userController.postaddNew);
-// router.post("/users/login", userController.postlogin);
+router.post("/users/singup",userController.postaddNew);
+router.post("/users/login",userController.postlogin);
 
 // router.get("/delete/:id", userController.postDelete);
 

@@ -37,34 +37,34 @@ exports.postaddNew = async (req, res, next) => {
   }
 };
 
-// exports.postlogin = async (req, res, next) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   try {
-//     const user = await Users.findOne({ where: { email: email } });
+exports.postlogin = async (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  try {
+    const user = await Users.findOne({ where: { email: email } });
 // console.log(user)
-//     if (user) {
-//       const passwordsMatch = await bcrypt.compare(password, user.password);
+    if (user) {
+      const passwordsMatch = await bcrypt.compare(password, user.password);
 
-//       if (passwordsMatch) {
+      if (passwordsMatch) {
 
-//         jwt.sign({userId: user.id },secret,{expiresIn:'2h'},(err,token)=>{
+        jwt.sign({userId: user.id },secret,{expiresIn:'2h'},(err,token)=>{
           
-//              res.status(201).json({ message: "Login successful" ,token:token});
+             res.status(201).json({ message: "Login successful" ,token:token});
           
-//         })
+        })
        
        
-//       } else {
+      } else {
        
-//         res.status(401).json({ message: "Incorrect password ! User not authorized" });
-//       }
-//     } else {
+        res.status(401).json({ message: "Incorrect password ! User not authorized" });
+      }
+    } else {
      
-//       res.status(404).json({ message: "User not found" });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "An error occurred" });
-//   }
-// };
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "An error occurred" });
+  }
+};
