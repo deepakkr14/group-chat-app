@@ -14,10 +14,11 @@ async function login(event) {
     // console.log(response.data);
     localStorage.setItem("token", response.data.token);
     if (response.status == 201) {
-      showAlertlert("Successfully logged in",2000);
+      showAlert("Successfully logged in",2000);
       window.location.href = "./chats-frontend.html";
     }
   } catch (error) {
+    console.log(error)
     showAlert(error.response.data.message, 4000);
   }
 }

@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const Users = require('./user-model');
 
 const secret="secretkey"
@@ -68,3 +68,18 @@ exports.postlogin = async (req, res, next) => {
     res.status(500).json({ message: "An error occurred" });
   }
 };
+exports.postMessage= async (req,res)=>{
+  const message = req.body.message;
+
+  try{
+  const messages= await req.user.createMessage({
+   messages:message})
+  // const mesages= await  req.user.getMessages()
+  res.status(200).json({message:"sent message"})
+  // console.log(messages)
+  }
+catch(err){
+  res.status(500).json({message:'message not send'})
+console.log(err)
+}
+}

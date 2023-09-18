@@ -10,7 +10,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const cors = require("cors");
 const sequelize = require("./database");
-
+const User = require("./user-model");
+const Message = require("./user-messages");
 const corsOptions = {
   origin:  '*',
   methods: "POST,GET",
@@ -23,6 +24,8 @@ app.use("/", (req, res) => {
   res.sendFile(__dirname + "/signup.html");
 });
 // app.listen(PORT, () => console.log(`server started at port ${PORT}`));
+User.hasMany(Message);
+Message.belongsTo(User)
 sequelize
   //   .sync({force:true})
   //  .sync({alter:true})
