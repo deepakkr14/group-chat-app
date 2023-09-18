@@ -12,7 +12,7 @@ const auth=require('./auth')
 router.post("/users/singup",userController.postaddNew);
 router.post("/users/login",userController.postlogin);
 router.post("/users/message",auth,userController.postMessage);
-router.post("/users/message",auth,userController.getMessage);
+router.get("/users/viewmessage",auth,userController.getMessage);
 
 // router.get("/delete/:id", userController.postDelete);
 

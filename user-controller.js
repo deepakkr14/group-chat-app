@@ -83,3 +83,12 @@ catch(err){
 console.log(err)
 }
 }
+exports.getMessage= async (req,res)=>{
+  try{ 
+    const mesages= await  req.user.getMessages()
+    res.status(200).json({message:"got message",data:mesages})
+  }
+  catch{
+    res.status(500).json({message:'no message'})
+  }
+}
