@@ -13,6 +13,7 @@ router.post("/users/singup",userController.postaddNew);
 router.post("/users/login",userController.postlogin);
 router.post("/users/message",auth,userController.postMessage);
 router.get("/users/viewmessage",auth,userController.getMessage);
+router.get("/users/clear",auth,userController.clear);
 
 // router.get("/delete/:id", userController.postDelete);
 

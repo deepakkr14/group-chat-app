@@ -1,17 +1,17 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Users = require('./user-model');
-
-const secret="secretkey"
+const User = require("./user-model");
+const Messages = require("./user-messages");
+const secret = "secretkey";
+const { Op } = require("sequelize");
 exports.postaddNew = async (req, res, next) => {
-
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
   const phone = req.body.phone;
 
   try {
-    const result = await Users.findAll({
+    const result = await User.findAll({
       where: {
         email: email,
       },
@@ -22,14 +22,14 @@ exports.postaddNew = async (req, res, next) => {
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      await Users.create({
+      await User.create({
         name,
         email,
         phone,
         password: hashedPassword,
       });
 
-      res.status(201).json({hashedPassword:hashedPassword});
+      res.status(201).json({ hashedPassword: hashedPassword });
     }
   } catch (error) {
     console.error("Error creating user:", error);
@@ -41,26 +41,26 @@ exports.postlogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   try {
-    const user = await Users.findOne({ where: { email: email } });
-// console.log(user)
+    const user = await User.findOne({ where: { email: email } });
+    // console.log(user)
     if (user) {
       const passwordsMatch = await bcrypt.compare(password, user.password);
 
       if (passwordsMatch) {
-
-        jwt.sign({userId: user.id },secret,{expiresIn:'2h'},(err,token)=>{
-          
-             res.status(201).json({ message: "Login successful" ,token:token});
-          
-        })
-       
-       
+        jwt.sign(
+          { userId: user.id },
+          secret,
+          { expiresIn: "2h" },
+          (err, token) => {
+            res.status(201).json({ message: "Login successful", token: token });
+          }
+        );
       } else {
-       
-        res.status(401).json({ message: "Incorrect password ! User not authorized" });
+        res
+          .status(401)
+          .json({ message: "Incorrect password ! User not authorized" });
       }
     } else {
-     
       res.status(404).json({ message: "User not found" });
     }
   } catch (err) {
@@ -68,27 +68,66 @@ exports.postlogin = async (req, res, next) => {
     res.status(500).json({ message: "An error occurred" });
   }
 };
-exports.postMessage= async (req,res)=>{
+exports.postMessage = async (req, res) => {
   const message = req.body.message;
 
-  try{
-  const messages= await req.user.createMessage({
-   messages:message})
-  // const mesages= await  req.user.getMessages()
-  res.status(200).json({message:"sent message"})
-  // console.log(messages)
+  try {
+    const messages = await req.user.createMessage({
+      messages: message,
+    });
+    // const mesages= await  req.user.getMessages()
+    res.status(200).json({ message: "sent message", userId: req.user.id });
+    // console.log(messages)
+  } catch (err) {
+    res.status(500).json({ message: "message not send" });
+    console.log(err);
   }
-catch(err){
-  res.status(500).json({message:'message not send'})
-console.log(err)
-}
-}
-exports.getMessage= async (req,res)=>{
-  try{ 
-    const mesages= await  req.user.getMessages()
-    res.status(200).json({message:"got message",data:mesages})
+};
+exports.clear = async (req, res) => {
+  try {
+    const id=req.user.id
+    const del = await Messages.destroy({
+      where: {
+        UserId: id,
+      },
+    });
+
+    // const del = await req.user.removeMessage(60
+    //   )
+    console.log("deleted")
+    res.status(200).json({ message: "all cleared" });
+  } catch {
+    (err) => console.log(err);
   }
-  catch{
-    res.status(500).json({message:'no message'})
-  }
-}
+};
+exports.getMessage = async (req, res) => {
+  try {
+    const index = parseInt(req.query.lastid) || -1;
+    const allmsg = await req.user.getMessages({
+      attributes: ["id", "messages"],
+
+      where: {
+        id: {
+          [Op.gt]: index, // Messages with IDs greater than 'index'
+        },
+      },
+    });
+    res.status(202).json({ msg: allmsg });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Something went wrong" });
+  }};
+
+  // exports.getolderMessage = async (req, res) => {
+  // try {
+  //   const mesages = await req.user.getMessages({
+  //     attributes: ['id', 'messages']
+  //   });
+  //   res
+  //     .status(200)
+  //     .json({msg:mesages});
+  // }
+  // catch {
+  //   res.status(500).json({ message: "no message" });
+  // }
+

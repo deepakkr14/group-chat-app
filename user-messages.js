@@ -3,15 +3,16 @@ const Sequelize = require("sequelize");
 const sequelize = require("./database");
 
 const Message = sequelize.define("messages", {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+      },
     messages:{
-        type:Sequelize.CHAR
+        type:Sequelize.STRING,
+        allowNull:false
     }
-//   id: {
-//     type: Sequelize.INTEGER,
-//     autoIncrement: true,
-//     allowNull: false,
-//     primaryKey: true,
-//   },
 //   name: {
 //     type:Sequelize.STRING,
 //   allowNull:false},
